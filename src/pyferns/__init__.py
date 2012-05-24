@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
-from _ferns import test_fern
+from _ferns import *
 
 
 def test():
-    test_fern()
+    print "test!"
 

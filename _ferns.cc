@@ -22,8 +22,8 @@
   ferns_demo; if not, write to the Free Software Foundation, Inc., 51 Franklin
   Street, Fifth Floor, Boston, MA 02110-1301, USA
 */
+#include "Python.h"
 #include <cv.h>
-#include <highgui.h>
 
 #include <iostream>
 #include <string>
@@ -43,8 +43,6 @@ template_matching_based_tracker * tracker;
 int mode = 2;
 bool show_tracked_locations = true;
 bool show_keypoints = true;
-
-CvFont font;
 
 void draw_quadrangle(IplImage * frame,
 		     int u0, int v0,
@@ -139,7 +137,6 @@ void detect_and_draw(IplImage * frame)
 			draw_tracked_position(frame, tracker);
 			if (show_tracked_locations) draw_tracked_locations(frame, tracker);
 		}
-		cvPutText(frame, "template-based 3D tracking", cvPoint(10, 30), &font, cvScalar(255, 255, 255));
 	} else {
 		detector->detect(frame);
 
@@ -160,41 +157,28 @@ void detect_and_draw(IplImage * frame)
 				draw_tracked_position(frame, tracker);
 				if (show_tracked_locations) draw_tracked_locations(frame, tracker);
 
-				cvPutText(frame, "detection+template-based 3D tracking", cvPoint(10, 30), &font, cvScalar(255, 255, 255));
 			} else {
 				if (show_keypoints) {
 					draw_detected_keypoints(frame, detector);
 					draw_recognized_keypoints(frame, detector);
 				}
 				draw_detected_position(frame, detector);
-				cvPutText(frame, "detection", cvPoint(10, 30), &font, cvScalar(255, 255, 255));
+				//cvPutText(frame, "detection", cvPoint(10, 30), &font, cvScalar(255, 255, 255));
 			}
 		} else {
 			last_frame_ok=false;
 			if (show_keypoints) draw_detected_keypoints(frame, detector);
 
-			if (mode == 3)
-				cvPutText(frame, "detection + template-based 3D tracking", cvPoint(10, 30), &font, cvScalar(255, 255, 255));
-			else
-				cvPutText(frame, "detection", cvPoint(10, 30), &font, cvScalar(255, 255, 255));
+			//if (mode == 3)
+			  //cvPutText(frame, "detection + template-based 3D tracking", cvPoint(10, 30), &font, cvScalar(255, 255, 255));
+			//else
+			  //cvPutText(frame, "detection", cvPoint(10, 30), &font, cvScalar(255, 255, 255));
 		}
 	}
 
-	cvShowImage("ferns-demo", frame);
 }
 
-void help(const string& exec_name) {
-  cout << exec_name << " [-m <model image>] [-s <image sequence format>]\n\n";
-  cout << "   -m : specify the name of the model image depicting the planar \n";
-  cout << "        object from a frontal viewpoint. Default model.bmp\n";
-  cout << "   -s : image sequence format in printf style, e.g. image%04.jpg,\n";
-  cout << "        to test detection. If not specified webcam is used as \n";
-  cout << "        image source.\n";
-  cout << "   -v : video filename to test detection. If not specified webcam\n";
-  cout << "        is used as image source.\n";
-  cout << "   -h : This help message." << endl;
-}
-
+/*
 int main(int argc, char ** argv)
 {
   string model_image     = "model.bmp";
@@ -353,4 +337,35 @@ int main(int argc, char ** argv)
   cvDestroyWindow("ferns-demo");
 
   return 0;
+}
+*/
+
+// python functions
+static PyObject *
+calc_leaves_distributions(PyObject *self, PyObject *args)
+{
+  Py_INCREF(Py_None);
+  return Py_None;
+}
+
+static PyObject *
+construct_detector(PyObject *self, PyObject *args)
+{
+  Py_INCREF(Py_None);
+  return Py_None;
+}
+
+static PyMethodDef FernsMethods[] = {
+  {"calc_leaves_distributions", calc_leaves_distributions, METH_VARARGS,
+   "calculate leaves distributions to make detector"},
+  {"construct_detector", construct_detector, METH_VARARGS,
+   "construct detector"},
+  {NULL, NULL, 0, NULL}
+};
+
+
+PyMODINIT_FUNC
+init_ferns(void)
+{
+  (void) Py_InitModule("_ferns", FernsMethods);
 }
