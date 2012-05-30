@@ -26,7 +26,7 @@ sys.path.append('./src')
 version = file('VERSION').read().strip()
 
 # get sources
-sources = ['_ferns.cc']
+sources = ['_ferns.i', 'planar_pattern_detector_wrapper.cpp']
 for tpl in os.walk(DIR_FERNS_DEMO):
     for filename in tpl[2]:
         for ext in ('.cc',):
@@ -37,7 +37,7 @@ ferns_ext = Extension('_ferns',
                       include_dirs=[DIR_FERNS_DEMO] + map(lambda i: i[2:], opencv_includes),
                       sources=sources,
                       libraries=opencv_libs,
-                      #extra_compile_args=opencv_libs,
+                      swig_opts=['-c++'],
                       )
 
 setup(name='pyferns',
