@@ -21,6 +21,8 @@
   #include "planar_pattern_detector_wrapper.hpp"
 %}
 
+%include "planar_pattern_detector_wrapper.hpp"
+
 %{
   // ------------------------------------------------------------------------------------
   // This code comes from the OpenCV 2.4.0 Python binding: modules/python/src2/cv2.cv.hpp

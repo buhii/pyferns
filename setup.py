@@ -33,7 +33,7 @@ for tpl in os.walk(DIR_FERNS_DEMO):
             if ext in filename and 'main' not in filename:
                 sources.append(os.path.join(tpl[0], filename))
 
-ferns_ext = Extension('_ferns',
+ferns_ext = Extension('_pyferns',
                       include_dirs=[DIR_FERNS_DEMO] + map(lambda i: i[2:], opencv_includes),
                       sources=sources,
                       libraries=opencv_libs,

@@ -67,6 +67,28 @@ except AttributeError:
     _newclass = 0
 
 
+class planar_pattern_detector_wrapper(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, planar_pattern_detector_wrapper, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, planar_pattern_detector_wrapper, name)
+    __repr__ = _swig_repr
+    def __init__(self): 
+        this = _pyferns.new_planar_pattern_detector_wrapper()
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _pyferns.delete_planar_pattern_detector_wrapper
+    __del__ = lambda self : None;
+    def just_load(self, *args): return _pyferns.planar_pattern_detector_wrapper_just_load(self, *args)
+    def save(self, *args): return _pyferns.planar_pattern_detector_wrapper_save(self, *args)
+    def learn(self, *args): return _pyferns.planar_pattern_detector_wrapper_learn(self, *args)
+    def detect(self, *args): return _pyferns.planar_pattern_detector_wrapper_detect(self, *args)
+    __swig_setmethods__["detector"] = _pyferns.planar_pattern_detector_wrapper_detector_set
+    __swig_getmethods__["detector"] = _pyferns.planar_pattern_detector_wrapper_detector_get
+    if _newclass:detector = _swig_property(_pyferns.planar_pattern_detector_wrapper_detector_get, _pyferns.planar_pattern_detector_wrapper_detector_set)
+planar_pattern_detector_wrapper_swigregister = _pyferns.planar_pattern_detector_wrapper_swigregister
+planar_pattern_detector_wrapper_swigregister(planar_pattern_detector_wrapper)
+
 # This file is compatible with both classic and new-style classes.
 
 
