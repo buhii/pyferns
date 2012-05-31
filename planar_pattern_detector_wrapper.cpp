@@ -37,6 +37,7 @@ planar_pattern_detector_wrapper::~planar_pattern_detector_wrapper(void)
 
 bool planar_pattern_detector_wrapper::just_load(const char * detector_data_filename)
 {
+  delete detector;
   detector = planar_pattern_detector_builder::just_load(detector_data_filename);
   detector->set_maximum_number_of_points_to_detect(1000);
   return !(!detector);
