@@ -16,6 +16,15 @@ develop-eggs
 # SWIG wrapper
 *wrap.cpp
 
+# test bitmaps
+*.bmp
+*.jpg
+*.jpeg
+*.doi
+
+# other stuffs
+*.inc
+
 # Installer logs
 pip-log.txt
 

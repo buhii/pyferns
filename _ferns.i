@@ -17,11 +17,7 @@
 */
 
 %module pyferns
-%{
-  #include "planar_pattern_detector_wrapper.hpp"
-%}
-
-%include "planar_pattern_detector_wrapper.hpp"
+%include exception.i
 
 %{
   // ------------------------------------------------------------------------------------
@@ -45,87 +41,78 @@
     return 0;
   }
 
-  struct cvmat_t {
+  struct iplimage_t {
     PyObject_HEAD
-    CvMat *a;
+    IplImage *a;
     PyObject *data;
     size_t offset;
   };
 
-  static PyTypeObject cvmat_Type = {
+  static PyTypeObject iplimage_Type = {
     PyObject_HEAD_INIT(&PyType_Type)
     0,                                      /*size*/
-    OLD_MODULESTR".cvmat",                  /*name*/
-    sizeof(cvmat_t),                        /*basicsize*/
+    OLD_MODULESTR".iplimage",               /*name*/
+    sizeof(iplimage_t),                     /*basicsize*/
   };
 
-  static int is_cvmat(PyObject *o)
+  static int is_iplimage(PyObject *o)
   {
-    return PyType_IsSubtype(o->ob_type, &cvmat_Type);
+    return (strcmp(o->ob_type->tp_name,"cv2.cv.iplimage") == 0);
+    // return PyType_IsSubtype(o->ob_type, &iplimage_Type);
   }
 
-  static int convert_to_CvMat(PyObject *o, CvMat **dst, const char *name)
+  static int convert_to_IplImage(PyObject *o, IplImage **dst, const char *name)
   {
-    cvmat_t *m = (cvmat_t*)o;
+    iplimage_t *ipl = (iplimage_t*)o;
     void *buffer;
     Py_ssize_t buffer_len;
 
-    if (!is_cvmat(o)) {
-      //#if !PYTHON_USE_NUMPY
-      return failmsg("Argument '%s' must be CvMat. Use fromarray() to convert numpy arrays to CvMat", name);
-      /*#else
-	PyObject *asmat = fromarray(o, 0);
-	if (asmat == NULL)
-	return failmsg("Argument '%s' must be CvMat", name);
-	// now have the array obect as a cvmat, can use regular conversion
-	return convert_to_CvMat(asmat, dst, name);
-	#endif*/
+    if (!is_iplimage(o)) {
+      return failmsg("Argument '%s' must be IplImage", name);
+    } else if (PyString_Check(ipl->data)) {
+      cvSetData(ipl->a, PyString_AsString(ipl->data) + ipl->offset, ipl->a->widthStep);
+      assert(cvGetErrStatus() == 0);
+      *dst = ipl->a;
+      return 1;
+    } else if (ipl->data && PyObject_AsWriteBuffer(ipl->data, &buffer, &buffer_len) == 0) {
+      cvSetData(ipl->a, (void*)((char*)buffer + ipl->offset), ipl->a->widthStep);
+      assert(cvGetErrStatus() == 0);
+      *dst = ipl->a;
+      return 1;
     } else {
-      m->a->refcount = NULL;
-      if (m->data && PyString_Check(m->data)) {
-	assert(cvGetErrStatus() == 0);
-	char *ptr = PyString_AsString(m->data) + m->offset;
-	cvSetData(m->a, ptr, m->a->step);
-	assert(cvGetErrStatus() == 0);
-	*dst = m->a;
-	return 1;
-      } else if (m->data && PyObject_AsWriteBuffer(m->data, &buffer, &buffer_len) == 0) {
-	cvSetData(m->a, (void*)((char*)buffer + m->offset), m->a->step);
-	assert(cvGetErrStatus() == 0);
-	*dst = m->a;
-	return 1;
-      } else if (m->data && m->a->data.ptr){
-	*dst = m->a;  
-	return 1;   
-      }
-      else {
-	return failmsg("CvMat argument '%s' has no data", name);
-      }
+      return failmsg("IplImage argument '%s' has no data", name);
     }
   }
 
   // ------------------------------------------------------------------------------------
 %}
 
-%typemap(in) CvMat *
+%typemap(in) IplImage *
 {
-  if (!convert_to_CvMat($input, &($1), ""))
+  if (!convert_to_IplImage($input, &($1), ""))
   {
-    SWIG_exception( SWIG_TypeError, "%%typemap: could not convert input argument to an CvMat");
+    SWIG_exception( SWIG_TypeError, "%%typemap: could not convert input argument to an IplImage");
   }
 }
 
-%typemap(typecheck) CvMat *
+%typemap(typecheck) IplImage *
 {
-  $1 = is_cvmat($input) ? 1 : 0;
+  $1 = is_iplimage($input) ? 1 : 0;
 }
 
 %typemap(out) int *
 {
-  int i;
   $result = PyTuple_New(DETECTOR_TUPLE_LENGTH);
   for (int i = 0; i < DETECTOR_TUPLE_LENGTH; i++) {
     PyObject *o = PyInt_FromSize_t( $1[i] );
     PyTuple_SetItem($result, i, o);
   }
 }
+
+
+%{
+  #include "planar_pattern_detector_wrapper.hpp"
+%}
+
+%include "planar_pattern_detector_wrapper.hpp"
+

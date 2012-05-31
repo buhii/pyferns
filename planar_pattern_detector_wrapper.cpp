@@ -39,27 +39,33 @@ bool planar_pattern_detector_wrapper::just_load(const char * detector_data_filen
 {
   detector = planar_pattern_detector_builder::just_load(detector_data_filename);
   detector->set_maximum_number_of_points_to_detect(1000);
-
   return !(!detector);
 }
 
 bool planar_pattern_detector_wrapper::save(const char * detector_data_filename)
 {
-  return false;
+  return detector->save(detector_data_filename);
 }
 
-bool planar_pattern_detector_wrapper::learn(const CvMat * input_image)
+bool planar_pattern_detector_wrapper::learn(const char * image_name)
 {
-  return false;
+  delete detector;
+  affine_transformation_range range;
+  detector = planar_pattern_detector_builder::learn(image_name,
+						    &range,
+						    400,
+						    5000,
+						    0.0,
+						    32, 7, 4,
+						    30, 12,
+						    10000, 200);
+  return !(!detector);
 }
 
-int * planar_pattern_detector_wrapper::detect(const CvMat * input_image)
+int * planar_pattern_detector_wrapper::detect(const IplImage * input_image)
 {
-  IplImage * iplimg, iplimg_header;
-  iplimg = cvGetImage(input_image, &iplimg_header);
-  int result[8] = {-1, -1, -1, -1, -1, -1, -1, -1};
-
-  detector->detect(iplimg);
+  int result[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+  detector->detect(input_image);
 
   if (detector->pattern_is_detected) {
     result[0] = detector->detected_u_corner[0];

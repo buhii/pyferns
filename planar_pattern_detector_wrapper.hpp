@@ -39,8 +39,8 @@ class planar_pattern_detector_wrapper
   bool just_load(const char * detector_data_filename);
   bool save(const char * detector_data_filename);
 
-  bool learn(const CvMat* input_image);
-  int * detect(const CvMat* input_image);
+  bool learn(const char * image_name);
+  int * detect(const IplImage* input_image);
 
   planar_pattern_detector * detector;
 };
