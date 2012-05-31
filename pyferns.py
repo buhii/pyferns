@@ -67,6 +67,7 @@ except AttributeError:
     _newclass = 0
 
 
+DETECTOR_TUPLE_LENGTH = _pyferns.DETECTOR_TUPLE_LENGTH
 class planar_pattern_detector_wrapper(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, planar_pattern_detector_wrapper, name, value)

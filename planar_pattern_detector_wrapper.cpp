@@ -27,7 +27,7 @@ using namespace std;
 
 planar_pattern_detector_wrapper::planar_pattern_detector_wrapper(void)
 {
-  affine_transformation_range range;
+  detector = new planar_pattern_detector();
 }
 
 planar_pattern_detector_wrapper::~planar_pattern_detector_wrapper(void)
@@ -38,6 +38,8 @@ planar_pattern_detector_wrapper::~planar_pattern_detector_wrapper(void)
 bool planar_pattern_detector_wrapper::just_load(const char * detector_data_filename)
 {
   detector = planar_pattern_detector_builder::just_load(detector_data_filename);
+  detector->set_maximum_number_of_points_to_detect(1000);
+
   return !(!detector);
 }
 
@@ -46,13 +48,29 @@ bool planar_pattern_detector_wrapper::save(const char * detector_data_filename)
   return false;
 }
 
-bool planar_pattern_detector_wrapper::learn(const CvMat* input_image)
+bool planar_pattern_detector_wrapper::learn(const CvMat * input_image)
 {
-  // zlib strings
   return false;
 }
 
-bool planar_pattern_detector_wrapper::detect(const CvMat* input_image)
+int * planar_pattern_detector_wrapper::detect(const CvMat * input_image)
 {
-  return false;
+  IplImage * iplimg, iplimg_header;
+  iplimg = cvGetImage(input_image, &iplimg_header);
+  int result[8] = {-1, -1, -1, -1, -1, -1, -1, -1};
+
+  detector->detect(iplimg);
+
+  if (detector->pattern_is_detected) {
+    result[0] = detector->detected_u_corner[0];
+    result[1] = detector->detected_v_corner[0];
+    result[2] = detector->detected_u_corner[1];
+    result[3] = detector->detected_v_corner[1];
+    result[4] = detector->detected_u_corner[2];
+    result[5] = detector->detected_v_corner[2];
+    result[6] = detector->detected_u_corner[3];
+    result[7] = detector->detected_v_corner[3];
+  }
+  return result;
 }
+

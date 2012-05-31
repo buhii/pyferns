@@ -20,6 +20,8 @@
 #ifndef PLANAR_PATTERN_DETECTOR_WRAPPER_HPP
 #define PLANAR_PATTERN_DETECTOR_WRAPPER_HPP
 
+#define DETECTOR_TUPLE_LENGTH 8
+
 using namespace std;
 
 #include "planar_pattern_detector.h"
@@ -38,7 +40,7 @@ class planar_pattern_detector_wrapper
   bool save(const char * detector_data_filename);
 
   bool learn(const CvMat* input_image);
-  bool detect(const CvMat* input_image);
+  int * detect(const CvMat* input_image);
 
   planar_pattern_detector * detector;
 };
