@@ -21,6 +21,7 @@
 #include <string>
 using namespace std;
 
+#include "mcv.h"
 #include "planar_pattern_detector_wrapper.hpp"
 #include "planar_pattern_detector_builder.h"
 
@@ -68,6 +69,7 @@ int * planar_pattern_detector_wrapper::detect(const IplImage * input_image)
   int result[8] = {0, 0, 0, 0, 0, 0, 0, 0};
   detector->detect(input_image);
 
+  /*
   if (detector->pattern_is_detected) {
     result[0] = detector->detected_u_corner[0];
     result[1] = detector->detected_v_corner[0];
@@ -77,7 +79,7 @@ int * planar_pattern_detector_wrapper::detect(const IplImage * input_image)
     result[5] = detector->detected_v_corner[2];
     result[6] = detector->detected_u_corner[3];
     result[7] = detector->detected_v_corner[3];
-  }
+    }*/
   return result;
 }
 

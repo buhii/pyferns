@@ -60,8 +60,8 @@ while True:
     if filter(lambda i: i != 0, tpl):
         # draw regions
         draw_region(gray, tpl, RED)
-        """
-    
     k = cv.WaitKey(10);
     if k == 'f':
         break
+        """
+    

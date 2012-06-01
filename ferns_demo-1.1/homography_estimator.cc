@@ -113,32 +113,48 @@ bool homography_estimator::estimate(homography06 * H,
 
 void homography_estimator::reset_correspondences(int maximum_number_of_correspondences)
 {
+  cout << endl << "H_estimator: @ reset_correspondences @ u_v_up_vp";
   manage_buffer(u_v_up_vp,            4 * maximum_number_of_correspondences, float);
+  cout << endl << "H_estimator: @ reset_correspondences @ normalized_u_v_up_vp";
   manage_buffer(normalized_u_v_up_vp, 4 * maximum_number_of_correspondences, float);
+  cout << endl << "H_estimator: @ reset_correspondences @ scores";
   manage_buffer(scores,                   maximum_number_of_correspondences, float);
+  cout << endl << "H_estimator: @ reset_correspondences @ sorted_ids";
   manage_buffer(sorted_ids,               maximum_number_of_correspondences, int);
 
+  cout << endl << "H_estimator: @ reset_correspondences @ manage_buffer ok.";
   number_of_correspondences = 0;
 }
 
 void homography_estimator::add_correspondence(float u, float v, float up, float vp)
 {
+  cout << endl << "H_estimator: @ u";
   u_v_up_vp[4 * number_of_correspondences    ] = u;
+  cout << endl << "H_estimator: @ v";
   u_v_up_vp[4 * number_of_correspondences + 1] = v;
+  cout << endl << "H_estimator: @ up";
   u_v_up_vp[4 * number_of_correspondences + 2] = up;
+  cout << endl << "H_estimator: @ vp";
   u_v_up_vp[4 * number_of_correspondences + 3] = vp;
 
+  cout << endl << "H_estimator: @ add_correspondence ok. number_of_correspondences is " << number_of_correspondences << ".";
   number_of_correspondences++;
 }
 
 void homography_estimator::add_correspondence(float u, float v, float up, float vp, float score)
 {
+  cout << endl << "H_estimator: @ u";
   u_v_up_vp[4 * number_of_correspondences    ] = u;
+  cout << endl << "H_estimator: @ v";
   u_v_up_vp[4 * number_of_correspondences + 1] = v;
+  cout << endl << "H_estimator: @ up";
   u_v_up_vp[4 * number_of_correspondences + 2] = up;
+  cout << endl << "H_estimator: @ vp";
   u_v_up_vp[4 * number_of_correspondences + 3] = vp;
+  cout << endl << "H_estimator: @ score";
   scores[number_of_correspondences] = score;
 
+  cout << endl << "H_estimator: @ add_correspondence ok. number_of_correspondences is " << number_of_correspondences << ".";
   number_of_correspondences++;
 }
 

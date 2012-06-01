@@ -32,7 +32,7 @@ using namespace std;
 
 #include <cv.h>
 
-#define MANAGED_MEMORY_DEBUGGING 0
+#define MANAGED_MEMORY_DEBUGGING 1
 
 // The 6 following functions are defined using macros (see below):
 /*
