@@ -66,10 +66,12 @@ bool planar_pattern_detector_wrapper::learn(const char * image_name)
 
 int * planar_pattern_detector_wrapper::detect(const IplImage * input_image)
 {
-  int result[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+  int i;
+  for (i = 0; i < 8; i++) {
+    result[i] = 0;
+  }
   detector->detect(input_image);
 
-  /*
   if (detector->pattern_is_detected) {
     result[0] = detector->detected_u_corner[0];
     result[1] = detector->detected_v_corner[0];
@@ -79,7 +81,12 @@ int * planar_pattern_detector_wrapper::detect(const IplImage * input_image)
     result[5] = detector->detected_v_corner[2];
     result[6] = detector->detected_u_corner[3];
     result[7] = detector->detected_v_corner[3];
-    }*/
+    /*
+    cout << "[wrapper] pt1: " << result[0] << "," << result[1] << endl;
+    cout << "[wrapper] pt2: " << result[2] << "," << result[3] << endl;
+    cout << "[wrapper] pt3: " << result[4] << "," << result[5] << endl;
+    cout << "[wrapper] pt4: " << result[6] << "," << result[7] << endl;
+    */
+  }
   return result;
 }
-

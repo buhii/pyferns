@@ -87,6 +87,9 @@ class planar_pattern_detector_wrapper(_object):
     __swig_setmethods__["detector"] = _pyferns.planar_pattern_detector_wrapper_detector_set
     __swig_getmethods__["detector"] = _pyferns.planar_pattern_detector_wrapper_detector_get
     if _newclass:detector = _swig_property(_pyferns.planar_pattern_detector_wrapper_detector_get, _pyferns.planar_pattern_detector_wrapper_detector_set)
+    __swig_setmethods__["result"] = _pyferns.planar_pattern_detector_wrapper_result_set
+    __swig_getmethods__["result"] = _pyferns.planar_pattern_detector_wrapper_result_get
+    if _newclass:result = _swig_property(_pyferns.planar_pattern_detector_wrapper_result_get, _pyferns.planar_pattern_detector_wrapper_result_set)
 planar_pattern_detector_wrapper_swigregister = _pyferns.planar_pattern_detector_wrapper_swigregister
 planar_pattern_detector_wrapper_swigregister(planar_pattern_detector_wrapper)
 

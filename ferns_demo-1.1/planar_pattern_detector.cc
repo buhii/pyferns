@@ -253,19 +253,19 @@ void planar_pattern_detector::match_points(void)
 
 bool planar_pattern_detector::estimate_H(void)
 {
-  cout << endl << "H_estimator: Hello, I'm estimate_H!";
+  //cout << endl << "H_estimator: Hello, I'm estimate_H!";
   H_estimator->reset_correspondences(number_of_model_points);
-  cout << endl << "H_estimator: reset_correspondences ok!";
+  //cout << endl << "H_estimator: reset_correspondences ok!";
 
   for(int i = 0; i < number_of_model_points; i++)
     if (model_points[i].class_score > 0) {
-      cout << endl << "H_estimator: add_correspondence at [" << i << "] model_points.";
+      // cout << endl << "H_estimator: add_correspondence at [" << i << "] model_points.";
       H_estimator->add_correspondence(model_points[i].fr_u(), model_points[i].fr_v(),
 				      model_points[i].potential_correspondent->fr_u(), model_points[i].potential_correspondent->fr_v(),
                                       model_points[i].class_score);
     }
 
-  cout << endl << "H_estimator: add_correspondences ok!";
+  // cout << endl << "H_estimator: add_correspondences ok!";
   return H_estimator->ransac(&H, 10., 1500, 0.99, true) > 10;
 }
 

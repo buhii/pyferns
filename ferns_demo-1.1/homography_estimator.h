@@ -63,8 +63,14 @@ class homography_estimator
   CvMat * AA, * W, * W8, * Ut, * Vt;
   CvMat * T1, * T2inv, * tmp;
   CvMat * AA2, * B2, * X2;
+
+  /*
   float * u_v_up_vp, * normalized_u_v_up_vp, * scores;
   int   * sorted_ids;
+  */
+  float u_v_up_vp[1600]; float normalized_u_v_up_vp[1600]; float scores[1600];
+  int sorted_ids[1600];
+
   int number_of_correspondences;
 
   void set_bottom_right_coefficient_to_one(homography06 * H);

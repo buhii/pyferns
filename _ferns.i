@@ -104,7 +104,7 @@
 {
   $result = PyTuple_New(DETECTOR_TUPLE_LENGTH);
   for (int i = 0; i < DETECTOR_TUPLE_LENGTH; i++) {
-    PyObject *o = PyInt_FromSize_t( $1[i] );
+    PyObject *o = PyInt_FromLong( $1[i] );
     PyTuple_SetItem($result, i, o);
   }
 }

@@ -6,13 +6,22 @@ IMG_NAME = "semiotics"
 # IMG_NAME = "monet"
 
 # --- initialize
-fd = FernsDetector()
+fd1 = FernsDetector()
+
+"""
+fd2 = FernsDetector()
+fd2.learn("millet.jpeg")
+fd2.save("millet.doi")
+"""
+
+fd2 = FernsDetector()
 
 if FLAG_INIT and False:
-    fd.learn(IMG_NAME + ".jpg")
-    fd.save(IMG_NAME + ".doi")
+    fd1.learn(IMG_NAME + ".jpg")
+    fd1.save(IMG_NAME + ".doi")
 else:
-    fd.just_load("monet.doi")
+    fd1.just_load("monet.doi")
+    fd2.just_load("millet.doi")
 
 # --- main
 
@@ -51,17 +60,21 @@ while True:
     gray = cv.CreateImage((width, height), 8, 1)
     # Convert color input image to grayscale
     cv.CvtColor(img, gray, cv.CV_BGR2GRAY)
-    cv.ShowImage("camera", gray)
 
     # detect
-    tpl = fd.detect(gray)
+    tpl = fd1.detect(gray)
 
-    """
     if filter(lambda i: i != 0, tpl):
-        # draw regions
+        print tpl
         draw_region(gray, tpl, RED)
+
+    tpl = fd2.detect(gray)
+
+    if filter(lambda i: i != 0, tpl):
+        print tpl
+        draw_region(gray, tpl, BLUE)
+
+    cv.ShowImage("camera", gray)
     k = cv.WaitKey(10);
     if k == 'f':
         break
-        """
-    

@@ -43,6 +43,7 @@ class planar_pattern_detector_wrapper
   int * detect(const IplImage* input_image);
 
   planar_pattern_detector * detector;
+  int result[8];
 };
 
 #endif // PLANAR_PATTERN_DETECTOR_WRAPPER_HPP
