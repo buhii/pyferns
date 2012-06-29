@@ -50,9 +50,6 @@ setup(name='pyferns',
       author_email='tk@buhii.org',
       url='https://github.com/buhii/pyferns',
       license='LGPL',
-      package_dir={'': 'src'},
-      packages=['pyferns'],
+      py_modules=['pyferns'],
       ext_modules=[ferns_ext],
-      #install_requires=["cv"],
-      #test_suite='test_ccv.suite'
       )

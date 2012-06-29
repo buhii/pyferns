@@ -1,34 +1,27 @@
 import cv
 from pyferns import planar_pattern_detector_wrapper as FernsDetector
-FLAG_INIT = False
 
-IMG_NAME = "semiotics"
-# IMG_NAME = "monet"
+FLAG_INIT = False
+REGION_THICKNESS = 6
+IMG_NAME = "millet"
 
 # --- initialize
 fd1 = FernsDetector()
+#fd2 = FernsDetector()
 
-"""
-fd2 = FernsDetector()
-fd2.learn("millet.jpeg")
-fd2.save("millet.doi")
-"""
-
-fd2 = FernsDetector()
-
-if FLAG_INIT and False:
+if FLAG_INIT:
     fd1.learn(IMG_NAME + ".jpg")
     fd1.save(IMG_NAME + ".doi")
 else:
     fd1.just_load("monet.doi")
-    fd2.just_load("millet.doi")
+    #fd2.just_load("millet.doi")
 
 # --- main
 
 cv.NamedWindow("camera", 1)
-capture = cv.CreateCameraCapture(0)
-width = 640
-height = 480
+capture = cv.CreateCameraCapture(1)
+width = 960
+height = 720
 
 RED = cv.RGB(255, 0, 0)
 BLUE = cv.RGB(0, 0, 255)
@@ -48,10 +41,10 @@ result = cv.CreateImage((width,height),cv.IPL_DEPTH_8U,3)
 
 def draw_region(img, tpl, color):
     pt1, pt2, pt3, pt4 = zip(tpl[0::2], tpl[1::2])
-    cv.Line(img, pt1, pt2, color)
-    cv.Line(img, pt2, pt3, color)
-    cv.Line(img, pt3, pt4, color)
-    cv.Line(img, pt4, pt1, color)
+    cv.Line(img, pt1, pt2, color, REGION_THICKNESS)
+    cv.Line(img, pt2, pt3, color, REGION_THICKNESS)
+    cv.Line(img, pt3, pt4, color, REGION_THICKNESS)
+    cv.Line(img, pt4, pt1, color, REGION_THICKNESS)
 
 
 while True:
@@ -62,17 +55,12 @@ while True:
     cv.CvtColor(img, gray, cv.CV_BGR2GRAY)
 
     # detect
-    tpl = fd1.detect(gray)
+    results = [fd1.detect(gray)] # [fd1.detect(gray), fd2.detect(gray)]
 
-    if filter(lambda i: i != 0, tpl):
-        print tpl
-        draw_region(gray, tpl, RED)
-
-    tpl = fd2.detect(gray)
-
-    if filter(lambda i: i != 0, tpl):
-        print tpl
-        draw_region(gray, tpl, BLUE)
+    for detect_color in zip(results, [RED, BLUE]):
+        detect, color = detect_color
+        if filter(lambda i: i != 0, detect):
+            draw_region(gray, detect, color)
 
     cv.ShowImage("camera", gray)
     k = cv.WaitKey(10);
