@@ -37,3 +37,6 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+# swig auto-generated file
+pyferns.py
