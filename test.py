@@ -1,4 +1,5 @@
-import cv
+import cv, cv2
+from numpy import array, int32
 from pyferns import planar_pattern_detector_wrapper as FernsDetector
 
 FLAG_INIT = False
@@ -19,7 +20,7 @@ else:
 # --- main
 
 cv.NamedWindow("camera", 1)
-capture = cv.CreateCameraCapture(1)
+capture = cv.CreateCameraCapture(0)
 width = 960
 height = 720
 
@@ -47,6 +48,22 @@ def draw_region(img, tpl, color):
     cv.Line(img, pt4, pt1, color, REGION_THICKNESS)
 
 
+def check_convex(v):
+    # return point array if contour is convex.
+    # or return None
+    contour = array([
+            [[v[0], v[1]]],
+            [[v[2], v[3]]],
+            [[v[4], v[5]]],
+            [[v[6], v[7]]]
+            ],
+            dtype=int32)
+    if cv2.isContourConvex(contour):
+        return v
+    else:
+        return None
+
+
 while True:
     img = cv.QueryFrame(capture)
     # image = DetectRedEyes(img, faceCascade, eyeCascade)
@@ -56,10 +73,11 @@ while True:
 
     # detect
     results = [fd1.detect(gray)] # [fd1.detect(gray), fd2.detect(gray)]
+    results = map(lambda area: check_convex(area), results)
 
     for detect_color in zip(results, [RED, BLUE]):
         detect, color = detect_color
-        if filter(lambda i: i != 0, detect):
+        if detect:
             draw_region(gray, detect, color)
 
     cv.ShowImage("camera", gray)
